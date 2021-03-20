@@ -8,15 +8,13 @@ blocks:
   - name: Installing dependency
     task:
       jobs:
-        - name: go test
+        - name: FIRST
           commands:
             - sem-version go 1.16
             - checkout
             - cache restore
             - go mod vendor
             - cache store
-        - name: 'Job #2'
-          commands: []
       env_vars:
         - name: GO111MODULE
           value: 'on'
@@ -24,7 +22,8 @@ blocks:
           value: '-mod=vendor'
     dependencies: []
   - name: test
-    dependencies: []
+    dependencies:
+      - Installing dependency
     task:
       env_vars:
         - name: G111MODULE
