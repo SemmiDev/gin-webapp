@@ -22,3 +22,21 @@ blocks:
           value: 'on'
         - name: GOFLAGS
           value: '-mod=vendor'
+    dependencies: []
+  - name: test
+    dependencies: []
+    task:
+      env_vars:
+        - name: G111MODULE
+          value: 'on'
+        - name: GOFLAGS
+          value: '-mod=vendor'
+      prologue:
+        commands:
+          - sem-version go 1.16
+          - checkout
+          - cache restore
+      jobs:
+        - name: Test
+          commands:
+            - go test ./...
