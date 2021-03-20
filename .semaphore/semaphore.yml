@@ -1,0 +1,41 @@
+version: v1.0
+name: Initial Pipeline
+agent:
+  machine:
+    type: e1-standard-4
+    os_image: ubuntu1804
+blocks:
+  - name: Installing dependency
+    task:
+      jobs:
+        - name: install
+          commands:
+            - sem-version go 1.16
+            - checkout
+            - cache restore
+            - go mod vendor
+            - cache store
+      env_vars:
+        - name: GO111MODULE
+          value: 'on'
+        - name: GOFLAGS
+          value: '-mod=vendor'
+    dependencies: []
+  - name: test
+    dependencies:
+      - Installing dependency
+    task:
+      env_vars:
+        - name: G111MODULE
+          value: 'on'
+        - name: GOFLAGS
+          value: '-mod=vendor'
+      prologue:
+        commands:
+          - sem-version go 1.16
+          - checkout
+          - cache restore
+      jobs:
+        - name: Test
+          commands:
+            - go test ./...
