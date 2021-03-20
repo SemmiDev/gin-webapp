@@ -8,7 +8,7 @@ blocks:
   - name: Installing dependency
     task:
       jobs:
-        - name: FIRST
+        - name: install
           commands:
             - sem-version go 1.16
             - checkout
